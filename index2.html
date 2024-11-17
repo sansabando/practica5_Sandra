@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMDB Test</title> <!-- Sets the title of the page -->
+</head>
+<body>
+    <h1>Popular Movies</h1> <!-- Heading for the movie list -->
+    <div id="movies-container"></div> <!-- Empty container to hold movie titles -->
+    
+    <script>
+        // Define the API key for accessing TMDb
+        const apiKey = '416585c1cba5dc40efaac668ebcc9e06'; // Replace with your own API key if needed
+
+        // Send a GET request to the TMDb API to fetch popular movies
+        fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`)
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => { //data is the information returned from the API
+
+                // Get the container where movie titles will be displayed
+                const moviesContainer = document.getElementById('movies-container');
+                
+                // Loop through each movie in the results array from the API response
+                data.results.forEach(movie => {
+                    // Create a new paragraph element for each movie title
+                    const movieElement = document.createElement('p');
+                    
+                    // Sets the text of the <p> element to the movie’s title, so each <p> will display the title of a different movie from data.results.
+                    movieElement.textContent = movie.title;
+                    
+                    // Append the paragraph to the container in the HTML
+                    moviesContainer.appendChild(movieElement);
+                });
+            })
+            .catch(err => console.error('Error fetching popular movies:', err)); // Log any errors to the console
+    </script>
+</body>
+</html>

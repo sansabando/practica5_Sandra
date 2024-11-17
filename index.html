@@ -1,0 +1,597 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SANTLIX</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <script src="search.js" defer></script>
+
+    <style>
+        /* Styles*/
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #141414;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            color: #E50914;
+            margin-top: 2rem;
+            font-weight: bold;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            color: #E50914;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 2rem;
+            margin-right: 5px;
+        }
+
+        /* Decorative Line */
+        .decorative-line {
+            width: 100%;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg,
+                #ffffff,
+                #ffffff 10px,
+                #000000 10px,
+                #000000 20px
+            );
+            margin: 1rem 0;
+        }
+
+        .expand-profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .reset-button {
+            background-color: #E50914;
+            color: #fff;
+            padding: 5px 15px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .add-button {
+            background-color: #E50914;
+            color: #fff;
+            padding: 5px 15px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 50px; 
+        }
+
+        /* Profile Header */
+        .profile-header {
+            font-size: 2rem;
+            color: #fff;
+            text-align: left;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .profile-subheader {
+            font-size: 1.5rem;
+            color: #E50914;
+            text-align: left;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .user-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .user-selection p {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #bbb;
+        }
+
+        .user-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .user-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .user-button img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .user-button:hover img {
+            transform: scale(1.1);
+        }
+
+        #main {
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        
+        .movie, .recommended-movie {
+            display: inline-block;
+            background: #333;
+            color: #fff;
+            width: 150px;
+            margin: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .movie img, .recommended-movie img {
+            width: 150px;   
+            height: 200px;  
+            object-fit: cover;  /* To do all the films the same with*/
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+        .movie .title, .recommended-movie .title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Action Buttons */
+        .actions button {
+            background-color: #E50914; /* Rojo */
+            color: #fff; /* Blanco para el texto */
+            border: none; /* Sin borde */
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 2px;
+            border-radius: 3px;
+        }
+        .actions button:hover {
+            background-color: #c40812;  }
+
+        /* Recommendation Section */
+        .recommendation-section {
+            margin-top: 20px;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .recommended-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #E50914;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .trending-movies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .trending-movies .movie {
+            width: 150px;
+            text-align: center;
+        }
+        .trailer-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .trailer-section iframe {
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+        }
+
+        .trailer-section h2 {
+            margin-top: 10px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        
+        .recommended-movie {
+            text-align: center; 
+        }
+
+        .recommended-title {
+            font-size: 1.5rem; 
+            font-family: 'Arial Black', sans-serif;
+            color: #E50914;
+            margin-top: 10px; 
+            text-shadow: 2px 2px 5px black;
+        }
+       
+        .trailer-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+
+        .trailer-title {
+            font-size: 2rem; 
+            font-family: 'Arial Black', sans-serif; 
+            color: #E50914; 
+            text-transform: uppercase;
+            text-shadow: 2px 2px 5px black; 
+            margin-bottom: 10px; 
+        }
+
+
+        .trailer-section iframe {
+            width: 100%; 
+            height: 450px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+        }
+
+
+
+
+
+    </style>
+    
+
+    <script type="text/javascript">
+        const initial_movies = [
+            { title: "Superlópez", director: "Javier Ruiz Caldera", thumbnail: "files/superlopez.png" },
+            { title: "Jurassic Park", director: "Steven Spielberg", thumbnail: "files/jurassicpark.png" },
+            { title: "Interstellar", director: "Christopher Nolan", thumbnail: "files/interstellar.png" }
+        ];
+        
+        const users = [
+            { name: "Adrian", img: "files/foto_dino.png" },
+            { name: "Pablo", img: "files/foto_seta.png" },
+            { name: "Arianna", img: "files/foto_princesa.png" }
+        ];
+
+        const recommendations = {
+            "Adrian": [
+                { title: "Jurassic Park 2", director: "Steven Spielberg", thumbnail: "files/jurassicpark2.png" }
+            ],
+            "Pablo": [
+                { title: "Super Mario Bros", director: "Annabel Jankel", thumbnail: "files/supermariobros.png" }
+            ],
+            "Arianna": [
+                { title: "Beauty and the Beast", director: "Gary Trousdale", thumbnail: "files/beautyandbeast.png" }
+            ]
+        };
+
+        const welcomeView = () => {
+            return `
+                <div class="user-selection">
+                    <h1>SANTLIX</h1>
+                    <p>Select your user:</p>
+                    <div class="user-buttons">
+                        ${users.map(user => `
+                            <button class="user-button" data-user="${user.name}">
+                                <img src="${user.img}" alt="${user.name}">
+                                ${user.name}
+                            </button>
+                        `).join('')}
+                    </div>
+                    
+                </div>`;
+        };
+
+
+        const indexView = (movies, user) => {
+            let trailerHTML = '';
+            if (user === 'Adrian') {
+                trailerHTML = `
+                    <div class="trailer-section">
+                        <h2 class="trailer-title">THE LEGO BATMAN MOVIE</h2>
+                        <iframe width="60%" height="315"  src="https://www.youtube.com/embed/n9c83L8hevQ?autoplay=1&mute=1" 
+                            title="The LEGO Batman Movie Trailer" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                        </iframe>
+                    </div>`;
+            } else if (user === 'Pablo') {
+                trailerHTML = `
+                    <div class="trailer-section">
+                        <h2 class="trailer-title">BARBIE</h2>
+                        <iframe width="60%" height="315" src="https://www.youtube.com/embed/jNoET7IGhcA?autoplay=1&mute=1" 
+                            title="Barbie Trailer" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                        </iframe>
+                    </div>`;
+            } else if (user === 'Arianna') {
+                trailerHTML = `
+                <div class="trailer-section">
+                    <h2 class="trailer-title">NARCOS</h2>
+                    <iframe width="60%" height="315" src="https://www.youtube.com/embed/xl8zdCY-abw?autoplay=1&mute=1" 
+                        title="Narcos Trailer" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                </div>`;
+            }
+
+
+
+            let view = `
+                <button class="back-button">Back</button>
+                <h1>SANTLIX</h1>
+                <div class="expand-profile-actions">
+                    <button class="reset-button reset">Reset</button>
+                    <button class="search-icon">&#128269;</button>
+                </div>
+                <div class="profile-header">${user}'s Profile</div>
+                <div class="decorative-line"></div>
+                ${trailerHTML}
+                <h2 class="profile-subheader">My Favourite Movies</h2>
+                <div class="movie-list">
+            `;
+
+            movies.forEach((movie, i) => {
+                view += `
+                    <div class="movie">
+                        <img src="${movie.thumbnail}" onerror="this.src='files/noimage.png'" alt="${movie.title}">
+                        <div class="title">${movie.title || "<em>No title</em>"}</div>
+                        <div class="actions">
+                            <button class="show" data-my-id="${i}">Show</button>
+                            <button class="edit" data-my-id="${i}">Edit</button>
+                            <button class="delete" data-my-id="${i}">Delete</button>
+                        </div>
+                    </div>`;
+            });
+
+            view += `</div>
+                    <div class="recommendation-section">
+                        <h2 class="profile-subheader">Recommended Movies for Your Profile</h2>
+                        <button class="add-button new">Add New Movie</button>
+                        <div class="recommended-list">`;
+
+    
+            recommendations[user].forEach((movie, i) => {
+            view += `
+                <div class="recommended-movie">
+                    <img src="${movie.thumbnail}" onerror="this.src='files/noimage.png'" alt="${movie.title}">
+                    <h3 class="recommended-title">${movie.title}</h3> <!-- Título grande y llamativo -->
+                    <div class="actions">
+                        <button class="show-recommended" data-recommended-id="${i}">Show</button>
+                        <button class="add-recommended" data-recommended-id="${i}">Add Movie</button>
+                    </div>
+                </div>`;
+            });
+
+ 
+            view += `</div>
+                    </div>`;
+
+            return view;
+        };
+
+            
+
+        const showView = (movie) => {
+            return `
+                <h2>${movie.title}</h2>
+                <p><strong>Director:</strong> ${movie.director}</p>
+                <img src="${movie.thumbnail}" style="width:150px; height:200px; object-fit: cover;" onerror="this.src='files/noimage.png'">
+                <div class="actions"><button class="index">Back</button></div>
+            `;
+        };
+
+        const editView = (movie, i) => {
+            return `
+                <h2>Edit Movie</h2>
+                <form id="edit-form">
+                    <label>Title: <input type="text" id="edit-title" value="${movie.title}"></label><br>
+                    <label>Director: <input type="text" id="edit-director" value="${movie.director}"></label><br>
+                    <label>Thumbnail URL: <input type="text" id="edit-thumbnail" value="${movie.thumbnail}"></label><br>
+                    <button type="button" class="update" data-my-id="${i}">Update</button>
+                    <button type="button" class="index">Back</button>
+                </form>`;
+        };
+
+        const welcomeContr = () => {
+            document.getElementById('main').innerHTML = welcomeView();
+        };
+
+        const indexContr = async () => {
+            const user = localStorage.getItem("selected_user");
+            if (!user) return welcomeContr();
+
+            const my_movies_key = `my_movies_${user}`;
+            const my_movies = JSON.parse(localStorage.getItem(my_movies_key) || JSON.stringify(initial_movies));
+    
+  
+            const trendingMovies = await getTrendingMovies();
+
+            document.getElementById('main').innerHTML = `
+                ${indexView(my_movies, user)}
+                <div class="decorative-line"></div>
+                ${trendingView(trendingMovies)}
+            `;
+
+            document.querySelectorAll('.add-trending').forEach((button) => {
+                const index = button.getAttribute('data-index');
+                button.addEventListener('click', () => {
+                    addTrendingContr(trendingMovies[index], user);
+                });
+            });
+        };
+
+
+
+        const showContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key));
+            document.getElementById('main').innerHTML = showView(my_movies[i]);
+        };
+
+        const showRecommendedContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let movie = recommendations[user][i];
+            document.getElementById('main').innerHTML = showView(movie);
+        };
+
+        const editContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key));
+            document.getElementById('main').innerHTML = editView(my_movies[i], i);
+        };
+
+        const updateContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key));
+            my_movies[i] = {
+                title: document.getElementById('edit-title').value,
+                director: document.getElementById('edit-director').value,
+                thumbnail: document.getElementById('edit-thumbnail').value
+            };
+            localStorage.setItem(my_movies_key, JSON.stringify(my_movies));
+            indexContr();
+        };
+
+        const deleteContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key));
+            if (confirm("Are you sure you want to delete this movie?")) {
+                my_movies.splice(i, 1);
+                localStorage.setItem(my_movies_key, JSON.stringify(my_movies));
+                indexContr();
+            }
+        };
+
+        const resetContr = () => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            localStorage.setItem(my_movies_key, JSON.stringify(initial_movies));
+            indexContr();
+        };
+
+        const newContr = () => {
+            document.getElementById('main').innerHTML = `
+                <h2>Add New Movie</h2>
+                <form id="new-form">
+                    <label>Title: <input type="text" id="new-title" required></label><br>
+                    <label>Director: <input type="text" id="new-director" required></label><br>
+                    <label>Thumbnail URL: <input type="text" id="new-thumbnail"></label><br>
+                    <button type="button" class="create">Create</button>
+                    <button type="button" class="index">Back</button>
+                </form>
+            `;
+        };
+
+        const createContr = () => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key)) || [];
+            const title = document.getElementById('new-title').value;
+            const director = document.getElementById('new-director').value;
+            const thumbnail = document.getElementById('new-thumbnail').value || 'files/noimage.png';
+            my_movies.push({ title, director, thumbnail });
+            localStorage.setItem(my_movies_key, JSON.stringify(my_movies));
+            indexContr();
+        };
+
+        const addRecommendedContr = (i) => {
+            const user = localStorage.getItem("selected_user");
+            let my_movies_key = `my_movies_${user}`;
+            let my_movies = JSON.parse(localStorage.getItem(my_movies_key)) || [];
+            const movieToAdd = recommendations[user][i];
+            my_movies.push(movieToAdd);
+            localStorage.setItem(my_movies_key, JSON.stringify(my_movies));
+            indexContr();
+        };
+
+        document.addEventListener('click', ev => {
+            
+            if (ev.target.matches('.back-button')) {
+                welcomeContr(); 
+            } else if (ev.target.matches('.home-button')) {
+                const user = localStorage.getItem("selected_user");
+                indexContr(user); 
+            }
+
+            else if (ev.target.matches('.index')) indexContr();
+            else if (ev.target.matches('.show')) showContr(Number(ev.target.dataset.myId));
+            else if (ev.target.matches('.show-recommended')) showRecommendedContr(Number(ev.target.dataset.recommendedId));
+            else if (ev.target.matches('.edit')) editContr(Number(ev.target.dataset.myId));
+            else if (ev.target.matches('.update')) updateContr(Number(ev.target.dataset.myId));
+            else if (ev.target.matches('.new')) newContr();
+            else if (ev.target.matches('.create')) createContr();
+            else if (ev.target.matches('.delete')) deleteContr(Number(ev.target.dataset.myId));
+            else if (ev.target.matches('.reset')) resetContr();
+            else if (ev.target.matches('.add-recommended')) addRecommendedContr(Number(ev.target.dataset.recommendedId));
+            else if (ev.target.matches('.user-button')) {
+                localStorage.setItem("selected_user", ev.target.dataset.user);
+                indexContr();
+            }
+            else if (ev.target.matches('.search-btn')) handleSearch();
+            else if (ev.target.matches('.search-icon')) toggleSearchBar();
+            
+        }
+        );
+
+        document.addEventListener('DOMContentLoaded', welcomeContr);
+    </script>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+
